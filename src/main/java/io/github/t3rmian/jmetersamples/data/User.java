@@ -1,16 +1,27 @@
 package io.github.t3rmian.jmetersamples.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
+@Table(name = "USERS")
 public class User {
     @Id
+    @GeneratedValue
     private Long id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
     private Date removalDate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Profile> profiles;
+
 
     public Long getId() {
         return id;
@@ -42,5 +53,13 @@ public class User {
 
     public void setRemovalDate(Date removalDate) {
         this.removalDate = removalDate;
+    }
+
+    public Set<Profile> getProfiles() {
+        return profiles == null ? Collections.emptySet() : profiles;
+    }
+
+    public void setProfiles(Set<Profile> profiles) {
+        this.profiles = profiles;
     }
 }

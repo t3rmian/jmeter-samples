@@ -4,7 +4,9 @@ import io.github.t3rmian.jmetersamples.data.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    Iterable<User> findByRemovalDateNotNull();
+    Optional<User> findByIdAndRemovalDateIsNull(Long id);
 }

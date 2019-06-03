@@ -1,6 +1,9 @@
 package io.github.t3rmian.jmetersamples.data;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -15,6 +18,8 @@ public class User {
     private String name;
 
     @Column(unique = true)
+    @Length(max = 50)
+    @Email
     private String email;
 
     private Date removalDate;

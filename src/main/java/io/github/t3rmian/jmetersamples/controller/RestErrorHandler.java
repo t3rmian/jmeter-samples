@@ -6,6 +6,8 @@ import io.github.t3rmian.jmetersamples.service.exception.UserExistsException;
 import io.github.t3rmian.jmetersamples.service.exception.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Date;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class RestErrorHandler {
@@ -52,5 +55,18 @@ public class RestErrorHandler {
         } else {
             return processClientException(new ClientException("Data integrity violation exception: " + message));
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ResponseBody
+    public ErrorResponse processDataIntegrityViolationException(MethodArgumentNotValidException manve) {
+        String erroredParameters = manve
+                .getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(FieldError::getField)
+                .collect(Collectors.joining());
+        return processClientException(new ClientException("Invalid value for parameter names: " + erroredParameters));
     }
 }

@@ -10,6 +10,7 @@ import io.github.t3rmian.jmetersamples.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,12 +44,12 @@ public class UserRestController {
     }
 
     @PutMapping("/v2/users")
-    public void putUser(@RequestBody UserRegistrationRequest userRequest) throws UserExistsException {
+    public void putUser(@RequestBody @Valid UserRegistrationRequest userRequest) throws UserExistsException {
         userService.registerUser(mapUserRequest(userRequest));
     }
 
     @PostMapping("/v2/users")
-    public void postUser(@RequestBody UserUpdateRequest userRequest) throws UserNotFoundException {
+    public void postUser(@RequestBody @Valid UserUpdateRequest userRequest) throws UserNotFoundException {
         User user = mapUserRequest(userRequest);
         user.setId(userRequest.getId());
         Set<Profile> profiles = userRequest.getProfiles()

@@ -3,34 +3,47 @@ package io.github.t3rmian.jmetersamples.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "PROFILES")
+@Table(name = "PROFILES", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id", "user_id", "type"})
+})
 public class Profile {
 
-    @EmbeddedId
-    @JsonIgnore
-    private ProfileID profileID;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String externalId;
 
     private Type type;
 
-    @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
 
-
-    public String getId() {
-        return profileID.getId();
+    public Profile() {
     }
 
-    public ProfileID getProfileID() {
-        return profileID;
+    public Profile(String externalId, Type type) {
+        this.externalId = externalId;
+        this.type = type;
     }
 
-    public void setProfileID(ProfileID profileID) {
-        this.profileID = profileID;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public Type getType() {
@@ -47,28 +60,6 @@ public class Profile {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Embeddable
-    public static class ProfileID implements Serializable {
-        private String id;
-        private Long userId;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public Long getUserId() {
-            return userId;
-        }
-
-        public void setUserId(Long userId) {
-            this.userId = userId;
-        }
     }
 
     public enum Type {

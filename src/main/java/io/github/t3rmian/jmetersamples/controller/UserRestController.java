@@ -5,9 +5,9 @@ import io.github.t3rmian.jmetersamples.controller.dto.UserUpdateRequest;
 import io.github.t3rmian.jmetersamples.data.Profile;
 import io.github.t3rmian.jmetersamples.data.User;
 import io.github.t3rmian.jmetersamples.service.UserService;
-import io.github.t3rmian.jmetersamples.service.exception.UserExistsException;
 import io.github.t3rmian.jmetersamples.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,17 +44,20 @@ public class UserRestController {
     }
 
     @PutMapping("/v2/users")
-    public void putUser(@RequestBody @Valid UserRegistrationRequest userRequest) throws UserExistsException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void putUser(@RequestBody @Valid UserRegistrationRequest userRequest) {
         userService.registerUser(mapUserRequest(userRequest));
     }
 
-    @PostMapping("/v2/users")
-    public void postUser(@RequestBody @Valid UserUpdateRequest userRequest) throws UserNotFoundException {
+    @PostMapping("/v2/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void postUser(@PathVariable("id") long id,
+                         @RequestBody @Valid UserUpdateRequest userRequest) throws UserNotFoundException {
         User user = mapUserRequest(userRequest);
-        user.setId(userRequest.getId());
+        user.setId(id);
         Set<Profile> profiles = userRequest.getProfiles()
                 .stream()
-                .map(p -> userService.linkUserProfile(user, p.getType(), p.getId()))
+                .map(p -> new Profile(p.getExternalId(), p.getType()))
                 .collect(Collectors.toSet());
         user.setProfiles(profiles);
         userService.updateUser(user);
@@ -67,7 +70,8 @@ public class UserRestController {
         return user;
     }
 
-    @PostMapping("/v2/users/{id}")
+    @DeleteMapping("/v2/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("id") long id) throws UserNotFoundException {
         userService.deleteUser(id);
     }

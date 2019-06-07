@@ -3,7 +3,6 @@ package io.github.t3rmian.jmetersamples.service;
 import io.github.t3rmian.jmetersamples.data.Profile;
 import io.github.t3rmian.jmetersamples.data.User;
 import io.github.t3rmian.jmetersamples.repository.UserRepository;
-import io.github.t3rmian.jmetersamples.service.exception.UserExistsException;
 import io.github.t3rmian.jmetersamples.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +31,10 @@ public class UserService {
     }
 
     public User getUser(long id) throws UserNotFoundException {
-        return userRepository.findByIdAndRemovalDateIsNull(id)
+        User user = userRepository.findByIdAndRemovalDateIsNull(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+        user.getProfiles();
+        return user;
     }
 
     @PostConstruct
@@ -42,8 +43,8 @@ public class UserService {
         doe.setEmail("doe@example.com");
         doe.setName("doe");
         doe.setProfiles(new HashSet<>(Arrays.asList(
-                linkUserProfile(doe, Profile.Type.LINKEDIN, "doeLinkedInId"),
-                linkUserProfile(doe, Profile.Type.TWITTER, "doeTwitterId")
+                new Profile("doeLinkedInId", Profile.Type.LINKEDIN),
+                new Profile("doeTwitterId", Profile.Type.TWITTER)
         )));
         User smith = new User();
         smith.setEmail("smith@example.com");
@@ -55,22 +56,12 @@ public class UserService {
         userRepository.saveAll(Arrays.asList(doe, smith, deletedMiller));
     }
 
-    public Profile linkUserProfile(User user, Profile.Type type, String profileId) {
-        Profile profile = new Profile();
-        Profile.ProfileID compositeId = new Profile.ProfileID();
-        compositeId.setId(profileId);
-        profile.setProfileID(compositeId);
-        profile.setUser(user);
-        profile.setType(type);
-        return profile;
-    }
-
     @Transactional
-    public void registerUser(User userDto) throws UserExistsException {
+    public void registerUser(User userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setRemovalDate(new Date());
+        user.setRegistrationDate(new Date());
         userRepository.save(user);
     }
 

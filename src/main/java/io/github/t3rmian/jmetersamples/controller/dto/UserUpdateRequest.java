@@ -2,22 +2,14 @@ package io.github.t3rmian.jmetersamples.controller.dto;
 
 import io.github.t3rmian.jmetersamples.data.Profile;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class UserUpdateRequest extends UserRegistrationRequest {
-    private Long id;
     private Set<ProfileUpdateRequest> profiles;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Set<ProfileUpdateRequest> getProfiles() {
-        return profiles;
+        return profiles == null ? Collections.emptySet() : profiles;
     }
 
     public void setProfiles(Set<ProfileUpdateRequest> profiles) {
@@ -25,15 +17,15 @@ public class UserUpdateRequest extends UserRegistrationRequest {
     }
 
     public static class ProfileUpdateRequest {
-        private String id;
+        private String externalId;
         private Profile.Type type;
 
-        public String getId() {
-            return id;
+        public String getExternalId() {
+            return externalId;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setExternalId(String externalId) {
+            this.externalId = externalId;
         }
 
         public Profile.Type getType() {

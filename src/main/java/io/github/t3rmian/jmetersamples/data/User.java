@@ -1,5 +1,8 @@
 package io.github.t3rmian.jmetersamples.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Date;
@@ -17,9 +20,13 @@ public class User {
     @Column(unique = true, length = 50)
     private String email;
 
+    private Date registrationDate;
+
+    @JsonIgnore
     private Date removalDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Profile> profiles;
 
 
@@ -47,6 +54,14 @@ public class User {
         this.email = email;
     }
 
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
     public Date getRemovalDate() {
         return removalDate;
     }
@@ -61,5 +76,6 @@ public class User {
 
     public void setProfiles(Set<Profile> profiles) {
         this.profiles = profiles;
+        profiles.forEach(p -> p.setUser(this));
     }
 }

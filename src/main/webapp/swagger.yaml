@@ -1,0 +1,238 @@
+swagger: '2.0'
+info:
+  description: Api Documentation, the versioning is only illustrative. There are some purposed mistakes in this specification. One of them is not aligned error response. Try to find it and validate using JMeter.
+  version: '2.0'
+  title: REST API for jmeter-samples
+  contact: {
+    name: "Source",
+    url: 'https://github.com/t3rmian/jmeter-samples'
+  }
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: users
+    description: sample users API
+paths:
+    /v1/users:
+      get:
+        tags:
+          - users
+        summary: get all users
+        operationId: getUsersUsingGET
+        produces:
+          - 'application/json'
+        responses:
+          '200':
+            description: OK
+            schema:
+              $ref: '#/definitions/Users'
+        deprecated: false
+    /v1/users/{id}:
+      get:
+        tags:
+          - users
+        summary: get user data [bugged version]
+        operationId: getUserIncorrectUsingGET
+        produces:
+          - 'application/json'
+        parameters:
+          - name: id
+            in: path
+            description: user id
+            required: true
+            type: integer
+            format: int64
+        responses:
+          '200':
+            description: OK
+            schema:
+              $ref: '#/definitions/User'
+          '404':
+            description: Not Found
+            schema:
+              $ref: '#/definitions/Error'
+        deprecated: true
+    /v2/users:
+      put:
+        tags:
+          - users
+        summary: register an user
+        operationId: putUserUsingPUT
+        consumes:
+          - application/json
+        produces:
+          - '*/*'
+          - 'application/json'
+        parameters:
+          - in: body
+            name: userRequest
+            description: userRequest
+            required: true
+            schema:
+              $ref: '#/definitions/UserRegistrationRequest'
+        responses:
+          '201':
+            description: Created
+          '409':
+            description: Conflict
+            schema:
+              $ref: '#/definitions/Error'
+        deprecated: false
+    '/v2/users/{id}':
+      get:
+        tags:
+          - users
+        summary: get user data
+        operationId: getUserCorrectUsingGET
+        produces:
+          - 'application/json'
+        parameters:
+          - name: id
+            in: path
+            description: user id
+            required: true
+            type: integer
+            format: int64
+        responses:
+          '200':
+            description: OK
+            schema:
+              $ref: '#/definitions/User'
+          '404':
+            description: Not Found
+            schema:
+              $ref: '#/definitions/Error'
+        deprecated: false
+      post:
+        tags:
+          - users
+        summary: update user data
+        operationId: postUserUsingPOST
+        consumes:
+          - application/json
+        produces:
+          - '*/*'
+        parameters:
+          - name: id
+            in: path
+            description: user id
+            required: true
+            type: integer
+            format: int64
+          - in: body
+            name: userRequest
+            description: userRequest
+            required: true
+            schema:
+              $ref: '#/definitions/UserUpdateRequest'
+        responses:
+          '204':
+            description: No Content
+        deprecated: false
+      delete:
+        tags:
+          - users
+        summary: delete user
+        operationId: deleteUserUsingDELETE
+        produces:
+          - '*/*'
+          - 'application/json'
+        parameters:
+          - name: id
+            in: path
+            description: user id
+            required: true
+            type: integer
+            format: int64
+        responses:
+          '204':
+            description: No Content
+          '404':
+            description: Not Found
+            schema:
+              $ref: '#/definitions/Error'
+        deprecated: false
+definitions:
+  Users:
+    type: array
+    items:
+      $ref: '#/definitions/User'
+  Profile:
+    type: object
+    properties:
+      externalId:
+        type: string
+      id:
+        type: integer
+        format: int64
+      type:
+        type: string
+        enum:
+          - GITHUB
+          - TWITTER
+          - LINKEDIN
+    title: Profile
+  ProfileUpdateRequest:
+    type: object
+    properties:
+      externalId:
+        type: string
+      type:
+        type: string
+        enum:
+          - GITHUB
+          - TWITTER
+          - LINKEDIN
+    title: ProfileUpdateRequest
+  User:
+    type: object
+    properties:
+      email:
+        type: string
+        example: "string@example.com"
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      profiles:
+        type: array
+        items:
+          $ref: '#/definitions/Profile'
+      registrationDate:
+        type: string
+        format: date-time
+    title: User
+  UserRegistrationRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        example: "email@example.com"
+      name:
+        type: string
+    title: UserRegistrationRequest
+  UserUpdateRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        example: "string@example.com"
+      name:
+        type: string
+      profiles:
+        type: array
+        items:
+          $ref: '#/definitions/ProfileUpdateRequest'
+    title: UserUpdateRequest
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+      time:
+        type: string
+        format: date-time

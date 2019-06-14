@@ -1,6 +1,6 @@
 package io.github.t3rmian.jmetersamples.controller;
 
-import io.github.t3rmian.jmetersamples.JmeterSamplesApplication;
+import io.github.t3rmian.jmetersamples.JMeterSamplesApplication;
 import io.github.t3rmian.jmetersamples.controller.dto.ErrorResponse;
 import io.github.t3rmian.jmetersamples.data.User;
 import io.github.t3rmian.jmetersamples.repository.UserRepository;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JmeterSamplesApplication.class})
+@ContextConfiguration(classes = {JMeterSamplesApplication.class})
 public class RestErrorHandlerTest {
 
     @Autowired

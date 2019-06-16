@@ -177,7 +177,7 @@ ORDER BY RAND()</stringProp>
             <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="$.error contains &apos;Email already registered&apos;" enabled="true">
               <stringProp name="JSON_PATH">$.error</stringProp>
               <stringProp name="EXPECTED_VALUE">Email already registered</stringProp>
-              <boolProp name="JSONVALIDATION">false</boolProp>
+              <boolProp name="JSONVALIDATION">true</boolProp>
               <boolProp name="EXPECT_NULL">false</boolProp>
               <boolProp name="INVERT">false</boolProp>
               <boolProp name="ISREGEX">true</boolProp>

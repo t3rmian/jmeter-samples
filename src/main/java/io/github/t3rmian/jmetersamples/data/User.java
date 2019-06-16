@@ -25,7 +25,7 @@ public class User {
     @JsonIgnore
     private Date removalDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Profile> profiles;
 
@@ -75,7 +75,12 @@ public class User {
     }
 
     public void setProfiles(Set<Profile> profiles) {
-        this.profiles = profiles;
+        if (this.profiles != null) {
+            this.profiles.clear();
+            this.profiles.addAll(profiles);
+        } else {
+            this.profiles = profiles;
+        }
         profiles.forEach(p -> p.setUser(this));
     }
 }

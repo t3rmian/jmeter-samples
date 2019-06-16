@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PROFILES", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "user_id", "type"})
+        @UniqueConstraint(columnNames = {"externalId", "user_id", "type"})
 })
 public class Profile {
 

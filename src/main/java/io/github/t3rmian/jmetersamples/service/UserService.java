@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -53,7 +54,10 @@ public class UserService {
         deletedMiller.setEmail("deletedMiller@example.com");
         deletedMiller.setName("deleted miller");
         deletedMiller.setRemovalDate(new Date());
-        userRepository.saveAll(Arrays.asList(doe, smith, deletedMiller));
+        userRepository.saveAll(Stream.of(doe, smith, deletedMiller)
+                .peek(u -> u.setRegistrationDate(new Date()))
+                .collect(Collectors.toList())
+        );
     }
 
     @Transactional
@@ -62,7 +66,6 @@ public class UserService {
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setRegistrationDate(new Date());
-        userRepository.save(user);
     }
 
     @Transactional

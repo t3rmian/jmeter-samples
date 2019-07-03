@@ -3,23 +3,35 @@ package io.github.t3rmian.jmetersamples.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 
 @Entity
 @Table(name = "PROFILES", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"externalId", "user_id", "type"})
 })
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "profile", propOrder = {
+        "id",
+        "externalId",
+        "type"
+}, namespace = "https://github.com/t3rmian/jmetersamples")
 public class Profile {
 
     @Id
     @GeneratedValue
+    @XmlElement(required = true)
     private Long id;
 
+    @XmlElement(required = true)
     private String externalId;
 
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "profileType", namespace = "https://github.com/t3rmian/jmetersamples")
     private Type type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @XmlTransient
     private User user;
 
     public Profile() {
@@ -62,6 +74,8 @@ public class Profile {
         this.user = user;
     }
 
+    @XmlEnum
+    @XmlType(name = "profileType", namespace = "https://github.com/t3rmian/jmetersamples")
     public enum Type {
         GITHUB, TWITTER, LINKEDIN
     }

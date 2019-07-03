@@ -4,29 +4,46 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "user", propOrder = {
+        "id",
+        "name",
+        "email",
+        "registrationDate",
+        "profiles"
+}, namespace = "https://github.com/t3rmian/jmetersamples")
 public class User {
     @Id
     @GeneratedValue
+    @XmlElement
     private Long id;
 
+    @XmlElement
     private String name;
 
     @Column(unique = true, length = 50)
+    @XmlElement(required = true)
     private String email;
 
+    @XmlElement(required = true)
+    @XmlSchemaType(name = "dateTime")
     private Date registrationDate;
 
     @JsonIgnore
+    @XmlTransient
     private Date removalDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @XmlElement
+    @XmlSchemaType(name = "profile", namespace = "https://github.com/t3rmian/jmetersamples")
     private Set<Profile> profiles;
 
 

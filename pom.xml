@@ -54,6 +54,18 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.2</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -66,6 +78,35 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>schemagen</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schemagen</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sources>
+						<source>${basedir}/src/main/java/io/github/t3rmian/jmetersamples/data</source>
+						<source>${basedir}/src/main/java/io/github/t3rmian/jmetersamples/controller/dto</source>
+						<source>${basedir}/src/main/java/io/github/t3rmian/jmetersamples/controller/ws/dto</source>
+					</sources>
+					<outputDirectory>${project.build.directory}/classes</outputDirectory>
+					<transformSchemas>
+						<transformSchema>
+							<uri>https://github.com/t3rmian/jmetersamples</uri>
+							<toPrefix>t3r</toPrefix>
+							<toFile>users.xsd</toFile>
+						</transformSchema>
+					</transformSchemas>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

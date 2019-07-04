@@ -61,11 +61,12 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(User userDto) {
+    public User registerUser(User userDto) {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setRegistrationDate(new Date());
+        return user;
     }
 
     @Transactional

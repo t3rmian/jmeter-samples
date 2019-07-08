@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.*;
         "id",
         "externalId",
         "type"
-}, namespace = "https://github.com/t3rmian/jmetersamples")
+})
 public class Profile {
 
     @Id

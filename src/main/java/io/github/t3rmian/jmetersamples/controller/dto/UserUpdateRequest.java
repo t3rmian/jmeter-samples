@@ -1,5 +1,6 @@
 package io.github.t3rmian.jmetersamples.controller.dto;
 
+import io.github.t3rmian.jmetersamples.controller.ws.WSEndpoint;
 import io.github.t3rmian.jmetersamples.data.Profile;
 
 import javax.xml.bind.annotation.*;
@@ -12,10 +13,10 @@ import java.util.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "userUpdateRequest", propOrder = {
         "profiles"
-}, namespace = "https://github.com/t3rmian/jmetersamples")
+})
 public class UserUpdateRequest extends UserRegistrationRequest {
     @XmlElement
-    @XmlSchemaType(name = "profileUpdateRequest", namespace = "https://github.com/t3rmian/jmetersamples")
+    @XmlSchemaType(name = "profileUpdateRequest", namespace = WSEndpoint.NAMESPACE_URI)
     private Set<ProfileUpdateRequest> profiles;
 
     public Set<ProfileUpdateRequest> getProfiles() {
@@ -30,7 +31,7 @@ public class UserUpdateRequest extends UserRegistrationRequest {
     @XmlType(name = "profileUpdateRequest", propOrder = {
             "externalId",
             "type"
-    }, namespace = "https://github.com/t3rmian/jmetersamples")
+    }, namespace = WSEndpoint.NAMESPACE_URI)
     public static class ProfileUpdateRequest {
         @XmlElement(required = true)
         private String externalId;

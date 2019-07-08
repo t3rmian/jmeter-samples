@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "userRegistrationRequest", propOrder = {
         "name",
         "email"
-}, namespace = "https://github.com/t3rmian/jmetersamples")
+})
 public class UserRegistrationRequest {
     @XmlElement
     private String name;

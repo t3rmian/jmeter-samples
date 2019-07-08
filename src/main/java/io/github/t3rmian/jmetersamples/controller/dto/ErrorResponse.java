@@ -7,8 +7,7 @@ import java.util.Date;
 @XmlType(name = "errorFault", propOrder = {
         "error",
         "time"
-}, namespace = "https://github.com/t3rmian/jmetersamples")
-@XmlRootElement(name = "commonFa", namespace = "https://github.com/t3rmian/jmetersamples")
+})
 public class ErrorResponse {
     @XmlElement
     private String error;

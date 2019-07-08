@@ -10,6 +10,6 @@ import javax.xml.bind.annotation.XmlType;
  * Operation finished successfully
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "success", namespace = WSEndpoint.NAMESPACE_URI)
+@XmlType(name = "success")
 public class SuccessResponse {
 }

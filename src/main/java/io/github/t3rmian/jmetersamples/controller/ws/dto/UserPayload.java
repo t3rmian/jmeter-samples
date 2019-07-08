@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "userPayload", propOrder = {
         "id"
-}, namespace = WSEndpoint.NAMESPACE_URI)
+})
 public class UserPayload {
     @XmlElement(required = true)
     private long id;

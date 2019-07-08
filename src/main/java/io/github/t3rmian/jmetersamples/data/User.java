@@ -2,6 +2,7 @@ package io.github.t3rmian.jmetersamples.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.github.t3rmian.jmetersamples.controller.ws.WSEndpoint;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.Set;
         "email",
         "registrationDate",
         "profiles"
-}, namespace = "https://github.com/t3rmian/jmetersamples")
+})
 public class User {
     @Id
     @GeneratedValue
@@ -43,7 +44,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @XmlElement
-    @XmlSchemaType(name = "profile", namespace = "https://github.com/t3rmian/jmetersamples")
+    @XmlSchemaType(name = "profile", namespace = WSEndpoint.NAMESPACE_URI)
     private Set<Profile> profiles;
 
 

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "userUpdateRequestPayload", propOrder = {
         "userUpdateRequest",
         "userPayload"
-}, namespace = WSEndpoint.NAMESPACE_URI)
+})
 public class UserUpdatePayload {
     @XmlElement(required = true)
     @XmlSchemaType(name = "userUpdateRequest", namespace = WSEndpoint.NAMESPACE_URI)

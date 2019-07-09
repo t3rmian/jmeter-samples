@@ -66,7 +66,7 @@ public class UserService {
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setRegistrationDate(new Date());
-        return user;
+        return userRepository.save(user);
     }
 
     @Transactional

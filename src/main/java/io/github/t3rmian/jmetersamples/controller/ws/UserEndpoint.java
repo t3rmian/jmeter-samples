@@ -19,10 +19,8 @@ import javax.xml.bind.JAXBElement;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.github.t3rmian.jmetersamples.controller.ws.WSEndpoint.NAMESPACE_URI;
-
 @Endpoint
-public class UserEndpoint {
+public class UserEndpoint implements WSEndpoint {
     private UserService userService;
     private ObjectFactory objectFactory;
 

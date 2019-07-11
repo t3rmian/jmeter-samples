@@ -23,7 +23,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    @XmlElement
+    @XmlElement(required = true)
     private Long id;
 
     @XmlElement

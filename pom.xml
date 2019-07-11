@@ -101,7 +101,7 @@
 					<outputDirectory>${project.build.directory}/classes</outputDirectory>
 					<transformSchemas>
 						<transformSchema>
-							<uri>https://github.com/t3rmian/jmetersamples</uri>
+							<uri>https://github.com/t3rmian/jmeter-samples</uri>
 							<toPrefix>t3r</toPrefix>
 							<toFile>users.xsd</toFile>
 						</transformSchema>

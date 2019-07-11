@@ -26,7 +26,7 @@ public class Profile {
     private String externalId;
 
     @XmlElement(required = true)
-    @XmlSchemaType(name = "profileType", namespace = "https://github.com/t3rmian/jmetersamples")
+    @XmlSchemaType(name = "profileType", namespace = "https://github.com/t3rmian/jmeter-samples")
     private Type type;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,7 +75,7 @@ public class Profile {
     }
 
     @XmlEnum
-    @XmlType(name = "profileType", namespace = "https://github.com/t3rmian/jmetersamples")
+    @XmlType(name = "profileType", namespace = "https://github.com/t3rmian/jmeter-samples")
     public enum Type {
         GITHUB, TWITTER, LINKEDIN
     }

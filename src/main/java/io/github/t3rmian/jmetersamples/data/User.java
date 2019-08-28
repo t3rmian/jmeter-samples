@@ -47,6 +47,12 @@ public class User {
     @XmlSchemaType(name = "profile", namespace = WSEndpoint.NAMESPACE_URI)
     private Set<Profile> profiles;
 
+    public User() {
+    }
+
+    public User(String email) {
+        this.email = email;
+    }
 
     public Long getId() {
         return id;

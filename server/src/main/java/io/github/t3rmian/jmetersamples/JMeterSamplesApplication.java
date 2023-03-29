@@ -5,6 +5,7 @@ import io.github.t3rmian.jmetersamples.controller.ws.SoapFaultExceptionResolver;
 import io.github.t3rmian.jmetersamples.controller.ws.WSEndpoint;
 import io.github.t3rmian.jmetersamples.service.exception.ClientException;
 import org.h2.tools.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -32,13 +33,16 @@ import java.util.Properties;
 @EnableWs
 public class JMeterSamplesApplication implements WebMvcConfigurer {
 
+    @Value("${databaseTcpPort}")
+    private int databaseTcpPort;
+
     public static void main(String[] args) {
         SpringApplication.run(JMeterSamplesApplication.class, args);
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server createInMemoryH2DatabaseServer() throws SQLException {
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9090");
+        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", String.valueOf(databaseTcpPort));
     }
 
     @Override

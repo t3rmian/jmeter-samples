@@ -1,18 +1,15 @@
 package io.github.t3rmian.jmetersamples.service;
 
-import antlr.collections.impl.IntRange;
 import io.github.t3rmian.jmetersamples.data.Profile;
 import io.github.t3rmian.jmetersamples.data.User;
 import io.github.t3rmian.jmetersamples.repository.UserRepository;
 import io.github.t3rmian.jmetersamples.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

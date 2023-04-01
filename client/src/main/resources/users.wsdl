@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="https://github.com/t3rmian/jmeter-samples"
+                  targetNamespace="https://github.com/t3rmian/jmeter-samples">
+  <!--snapshot from http://localhost:8080/ws/users.wsdl-->
+  <wsdl:types>
+    <xs:schema xmlns:t3r="https://github.com/t3rmian/jmeter-samples" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://github.com/t3rmian/jmeter-samples" version="1.0">
+
+  <xs:element name="commonFault" type="t3r:errorFault"/>
+
+  <xs:element name="deleteUserRequest" type="t3r:userPayload"/>
+
+  <xs:element name="deleteUserResponse" type="t3r:success"/>
+
+  <xs:element name="getUserIncorrectRequest" type="t3r:userPayload"/>
+
+  <xs:element name="getUserIncorrectResponse" type="t3r:user"/>
+
+  <xs:element name="getUserRequest" type="t3r:userPayload"/>
+
+  <xs:element name="getUserResponse" type="t3r:user"/>
+
+  <xs:element name="registerUserRequest" type="t3r:userRegistrationRequest"/>
+
+  <xs:element name="registerUserResponse" type="t3r:userPayload"/>
+
+  <xs:element name="updateUserRequest" type="t3r:userUpdateRequestPayload"/>
+
+  <xs:element name="updateUserResponse" type="t3r:success"/>
+
+  <xs:complexType name="errorFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="error" type="xs:string"/>
+      <xs:element name="time" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userRegistrationRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userUpdateRequest">
+    <xs:annotation>
+      <xs:documentation>User data to be updated (old data will be removed e.g. profiles)</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="t3r:userRegistrationRequest">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="profiles" type="t3r:profileUpdateRequest"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="profileUpdateRequest">
+    <xs:sequence>
+      <xs:element form="unqualified" name="externalId" type="xs:string"/>
+      <xs:element form="unqualified" name="type" type="t3r:profileType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userPayload">
+    <xs:annotation>
+      <xs:documentation>User context for the operation</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="user">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="email" type="xs:string"/>
+      <xs:element name="registrationDate" type="xs:dateTime"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="profiles" type="t3r:profile"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="externalId" type="xs:string"/>
+      <xs:element name="type" type="t3r:profileType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="success">
+    <xs:annotation>
+      <xs:documentation>Operation finished successfully</xs:documentation>
+    </xs:annotation>
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="userUpdateRequestPayload">
+    <xs:sequence>
+      <xs:element name="userUpdateRequest" type="t3r:userUpdateRequest"/>
+      <xs:element name="userPayload" type="t3r:userPayload"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="profileType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GITHUB"/>
+      <xs:enumeration value="TWITTER"/>
+      <xs:enumeration value="LINKEDIN"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getUserIncorrectResponse">
+    <wsdl:part element="tns:getUserIncorrectResponse" name="getUserIncorrectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserRequest">
+    <wsdl:part element="tns:deleteUserRequest" name="deleteUserRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserResponse">
+    <wsdl:part element="tns:getUserResponse" name="getUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerUserRequest">
+    <wsdl:part element="tns:registerUserRequest" name="registerUserRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserIncorrectRequest">
+    <wsdl:part element="tns:getUserIncorrectRequest" name="getUserIncorrectRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateUserResponse">
+    <wsdl:part element="tns:updateUserResponse" name="updateUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteUserResponse">
+    <wsdl:part element="tns:deleteUserResponse" name="deleteUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerUserResponse">
+    <wsdl:part element="tns:registerUserResponse" name="registerUserResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUserRequest">
+    <wsdl:part element="tns:getUserRequest" name="getUserRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateUserRequest">
+    <wsdl:part element="tns:updateUserRequest" name="updateUserRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="commonFault">
+    <wsdl:part element="tns:commonFault" name="commonFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Users">
+    <wsdl:operation name="getUserIncorrect">
+      <wsdl:input message="tns:getUserIncorrectRequest" name="getUserIncorrectRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserIncorrectResponse" name="getUserIncorrectResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:commonFault" name="commonFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser">
+      <wsdl:input message="tns:deleteUserRequest" name="deleteUserRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:deleteUserResponse" name="deleteUserResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:commonFault" name="commonFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getUser">
+      <wsdl:input message="tns:getUserRequest" name="getUserRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getUserResponse" name="getUserResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:commonFault" name="commonFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="registerUser">
+      <wsdl:input message="tns:registerUserRequest" name="registerUserRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:registerUserResponse" name="registerUserResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:commonFault" name="commonFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <wsdl:input message="tns:updateUserRequest" name="updateUserRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateUserResponse" name="updateUserResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:commonFault" name="commonFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UsersSoap11" type="tns:Users">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getUserIncorrect">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getUserIncorrectRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserIncorrectResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="deleteUserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getUserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="registerUser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="registerUserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="registerUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="updateUserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UsersService">
+    <wsdl:port binding="tns:UsersSoap11" name="UsersSoap11">
+      <soap:address location="http://localhost:8080/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

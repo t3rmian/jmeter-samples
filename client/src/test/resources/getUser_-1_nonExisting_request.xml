@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns2:getUserRequest xmlns:ns2="https://github.com/t3rmian/jmeter-samples">
+            <ns2:id>-1</ns2:id>
+        </ns2:getUserRequest>
+    </soap:Body>
+</soap:Envelope>

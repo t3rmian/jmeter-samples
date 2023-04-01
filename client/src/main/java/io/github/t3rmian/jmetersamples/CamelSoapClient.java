@@ -3,6 +3,7 @@ package io.github.t3rmian.jmetersamples;
 import https.github_com.t3rmian.jmeter_samples.ObjectFactory;
 import https.github_com.t3rmian.jmeter_samples.User;
 import https.github_com.t3rmian.jmeter_samples.UserPayload;
+import https.github_com.t3rmian.jmeter_samples.Users;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.cxf.common.DataFormat;
@@ -56,10 +57,8 @@ public class CamelSoapClient {
     }
     static String getCxfUri(DataFormat dataFormat) {
         return "cxf://{{wsEndpointAddress}}"
-                + "?wsdlURL=users.wsdl"
-                + "&serviceClass=https.github_com.t3rmian.jmeter_samples.Users"
-                + "&serviceName={https://github.com/t3rmian/jmeter-samples}UsersService"
-                + "&portName={https://github.com/t3rmian/jmeter-samples}UsersSoap11"
+                + "?wsdlURL=classpath:users.wsdl"
+                + "&serviceClass=" + Users.class.getName()
                 + "&dataFormat=" + dataFormat;
     }
 

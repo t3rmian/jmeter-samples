@@ -12,7 +12,6 @@ import org.apache.camel.component.cxf.common.CxfPayload;
 import org.apache.camel.component.cxf.common.DataFormat;
 import org.apache.camel.component.cxf.common.message.CxfConstants;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.cxf.binding.soap.SoapBindingConstants;
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.ext.logging.LoggingFeature;
 import org.apache.cxf.frontend.ClientProxy;
@@ -150,6 +149,7 @@ public class CamelSoapClientIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .to(getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.POJO))
                             .log("Body after cxf route: ${body[0]}"); // body is of MessageContentsList
                 }
@@ -173,7 +173,30 @@ public class CamelSoapClientIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .to(getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.RAW))
+                            .log("Body after cxf route: ${body}");
+                }
+            });
+            camelContext.start();
+            String response = camelContext.createProducerTemplate().requestBody("direct:getUser", message, String.class);
+
+            assertThat(response, containsString(String.valueOf(EXISTING_USER_ID)));
+            assertThat(response, containsString(EXISTING_USER_NAME));
+        }
+    }
+
+    @Test
+    public void given_existingUserSmith_When_getUserBySmithId_usingCamelCxfRawFormatGenericDispatchMode_Then_returnSmithName() throws Exception {
+        String message = getTestResourceContent("getUser_4_smith_request.xml");
+
+        try (CamelContext camelContext = new DefaultCamelContext()) {
+            camelContext.addRoutes(new RouteBuilder() {
+                @Override
+                public void configure() {
+                    from("direct:getUser")
+                            .log("Body before cxf route: ${body}")
+                            .to("cxf://{{wsEndpointAddress}}/UsersSoap11?dataFormat=" + DataFormat.RAW)
                             .log("Body after cxf route: ${body}");
                 }
             });
@@ -188,7 +211,7 @@ public class CamelSoapClientIT {
     static String getTestResourceContent(String testResourceName) throws IOException {
         try (InputStream requestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(testResourceName);
              InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(requestStream, "Test resource not found"), StandardCharsets.UTF_8);
-             BufferedReader bufferedReader = new BufferedReader(streamReader);
+             BufferedReader bufferedReader = new BufferedReader(streamReader)
         ) {
             return bufferedReader.lines().collect(Collectors.joining("\n"));
         }
@@ -205,9 +228,8 @@ public class CamelSoapClientIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
-                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser")) // helpful for client-side mapping (when same input type maps to multiple outputs)
-                            .setHeader(SoapBindingConstants.SOAP_ACTION, constant("getUser")) // helpful for some server-side cases/implementations
-                            .to(CamelSoapClientIT.getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.CXF_MESSAGE))
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
+                            .to(getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.CXF_MESSAGE))
                             .log("Body after cxf route: ${body}");
                 }
             });
@@ -217,6 +239,33 @@ public class CamelSoapClientIT {
             SOAPBody soapBody = response.getSOAPBody();
             assertEquals(soapBody.getElementsByTagNameNS(NS, "id").item(0).getTextContent(), String.valueOf(EXISTING_USER_ID));
             assertEquals(soapBody.getElementsByTagNameNS(NS, "name").item(0).getTextContent(), EXISTING_USER_NAME);
+        }
+    }
+
+    @Test
+    public void given_existingUserSmith_When_getUserBySmithId_usingCamelCxfPayloadFormatGenericDispatchMode_Then_returnSmithName() throws Exception {
+        List<Source> outElements = new ArrayList<>();
+        Document outDocument = createGetUserXmlDocument(EXISTING_USER_ID);
+        outElements.add(new DOMSource(outDocument.getDocumentElement()));
+        CxfPayload<SoapHeader> payload = new CxfPayload<>(null, outElements, null);
+
+        try (CamelContext camelContext = new DefaultCamelContext()) {
+            camelContext.addRoutes(new RouteBuilder() {
+                @Override
+                public void configure() {
+                    from("direct:getUser")
+                            .log("Body before cxf route: ${body}")
+                            .to("cxf://{{wsEndpointAddress}}/UsersSoap11?dataFormat=" + DataFormat.PAYLOAD)
+                            .log("Body after cxf route: ${body}");
+                }
+            });
+            camelContext.start();
+            //noinspection unchecked
+            CxfPayload<Element> response = camelContext.createProducerTemplate().requestBody("direct:getUser", payload, CxfPayload.class);
+            Element getUserResponse = response.getBody().get(0);
+
+            assertEquals(getUserResponse.getElementsByTagNameNS(NS, "id").item(0).getTextContent(), String.valueOf(EXISTING_USER_ID));
+            assertEquals(getUserResponse.getElementsByTagNameNS(NS, "name").item(0).getTextContent(), EXISTING_USER_NAME);
         }
     }
 

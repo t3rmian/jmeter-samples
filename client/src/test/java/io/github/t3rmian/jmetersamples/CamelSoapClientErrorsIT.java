@@ -67,6 +67,7 @@ public class CamelSoapClientErrorsIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .to(CamelSoapClientIT.getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.POJO))
                             .end()
                             .log("Body after cxf route: ${body}");
@@ -88,6 +89,7 @@ public class CamelSoapClientErrorsIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .doTry()
                             .to(CamelSoapClientIT.getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.POJO))
                             .doCatch(Exception.class)
@@ -117,6 +119,7 @@ public class CamelSoapClientErrorsIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .to(CamelSoapClientIT.getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.RAW))
                             .log("Body after cxf route: ${body}");
                 }
@@ -140,13 +143,13 @@ public class CamelSoapClientErrorsIT {
                 public void configure() {
                     from("direct:getUser")
                             .log("Body before cxf route: ${body}")
+                            .setHeader(CxfConstants.OPERATION_NAME, constant("getUser"))
                             .doTry()
                             .to(CamelSoapClientIT.getCxfUriWithVerboseLoggingOfDataFormat(DataFormat.CXF_MESSAGE))
                             .doCatch(Exception.class)
                             .process(exchange -> exchange.getIn().setBody(exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class)))
                             .end()
                             .log("Body after cxf route: ${body}");
-                    ;
                 }
             });
             camelContext.start();

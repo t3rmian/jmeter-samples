@@ -24,7 +24,7 @@ public class CxfTimeoutConfigurer implements CxfConfigurer {
         HTTPConduit httpConduit = (HTTPConduit) client.getConduit();
         httpConduit.setClient(getHttpClientPolicy());
         LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor(new PrettyLoggingFilter(new Slf4jVerboseEventSender()));
-        client.getOutInterceptors().add(loggingInInterceptor);
+        client.getInInterceptors().add(loggingInInterceptor);
         LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor(new PrettyLoggingFilter(new Slf4jVerboseEventSender()));
         client.getOutInterceptors().add(loggingOutInterceptor);
     }
